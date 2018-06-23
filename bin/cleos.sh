@@ -2,7 +2,7 @@
 ################################################################################
 #
 # EOS Cleos wrapper
-# 
+#
 # Created by http://CryptoLions.io
 #
 # Git Hub: https://github.com/CryptoLions
