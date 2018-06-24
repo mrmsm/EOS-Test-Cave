@@ -10,10 +10,10 @@
 #
 ###############################################################################
 
-SCRIPTPATH=$(dirname $(realpath $0))""
+SCRIPTPATH=$(/usr/bin/dirname $(realpath $0))""
 config="$SCRIPTPATH/../config.json"
-WALLETHOST="$( jq -r '.walletAddr' "$config" )"
-NODEHOST="$( jq -r '.nodeos' "$config" )"
+WALLETHOST="$( /usr/bin/jq -r '.walletAddr' "$config" )"
+NODEHOST="$( /usr/bin/jq -r '.nodeos' "$config" )"
 
 
 $SCRIPTPATH/bin/cleos -u http://$NODEHOST --wallet-url http://$WALLETHOST "$@"

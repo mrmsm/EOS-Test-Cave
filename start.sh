@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GLOBALPATH=$(dirname $(realpath $0))
+GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
 
 /bin/echo "Preparing and clearing..."
 # Restart chain
@@ -45,8 +45,8 @@ startCategoryTest(){
     /bin/echo "";
     /bin/echo -e "\e[1;39m╔════════════════════╣ \e[1;32m Tests $1 \e[m ╠═══════════════════════════════╗\e[m \n";
 
-    mydir=$(pwd)
-    STARTTIME_GROUP=$(date +%s.%N)
+    mydir=$(/bin/pwd)
+    STARTTIME_GROUP=$(/bin/date +%s.%N)
     TEST_FAILED_WALLET=0
     TEST_OK_WALLET=0
 
@@ -87,8 +87,8 @@ startCategoryTest "tests/02_account"
 #########################################################################################################################
 
 
-ENDTIME=$(date +%s.%N)
-DIFF=$(echo "$ENDTIME - $STARTTIME" | /usr/bin/bc)
+ENDTIME=$(/bin/date +%s.%N)
+DIFF=$(/bin/echo "$ENDTIME - $STARTTIME" | /usr/bin/bc)
 
 /bin/echo ""
 /bin/echo ""

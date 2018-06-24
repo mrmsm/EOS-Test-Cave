@@ -13,18 +13,18 @@
 DIR=/home/ubuntu/test
 
     if [ -f $DIR"/nodeos.pid" ]; then
-        pid=$(cat $DIR"/nodeos.pid")
-        echo $pid
-        kill $pid
-        rm -r $DIR"/nodeos.pid"
+        pid=$(/bin/cat $DIR"/nodeos.pid")
+        /bin/echo $pid
+        /bin/kill $pid
+        /bin/rm -r $DIR"/nodeos.pid"
 
-        echo -ne "Stopping Nodeos"
+        /bin/echo -ne "Stopping Nodeos"
 
         while true; do
             [ ! -d "/proc/$pid/fd" ] && break
-            echo -ne "."
-            sleep 1
+            /bin/echo -ne "."
+            /bin/sleep 1
         done
-        echo -ne "\rNodeos stopped. \n"
+        /bin/echo -ne "\rNodeos stopped. \n"
 
     fi

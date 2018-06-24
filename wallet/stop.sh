@@ -8,22 +8,22 @@
 #
 ################################################################################
 config="../config.json"
-DIR="$( jq -r '.wallet_data_dir' "$config" )"
+DIR="$( /usr/bin/jq -r '.wallet_data_dir' "$config" )"
 
     if [ -f $DIR"/wallet.pid" ]; then
-        pid=$(cat $DIR"/wallet.pid")
-        echo $pid
-        kill $pid
-        rm -r $DIR"/wallet.pid"
+        pid=$(/bin/cat $DIR"/wallet.pid")
+        /bin/echo $pid
+        /bin/kill $pid
+        /bin/rm -r $DIR"/wallet.pid"
 
-        echo -ne "Stoping Wallet"
+        /bin/echo -ne "Stoping Wallet"
 
         while true; do
             [ ! -d "/proc/$pid/fd" ] && break
-            echo -ne "."
-            sleep 1
+            /bin/echo -ne "."
+            /bin/sleep 1
         done
-        echo -ne "\rWallet stopped. \n"
+        /bin/echo -ne "\rWallet stopped. \n"
 
     fi
 
