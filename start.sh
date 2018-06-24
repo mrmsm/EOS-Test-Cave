@@ -2,7 +2,7 @@
 
 GLOBALPATH=$(dirname $(realpath $0))
 
-echo "Preparing and clearing..."
+/bin/echo "Preparing and clearing..."
 # Restart chain
 config="$GLOBALPATH/config.json"
 NODE_DIR="$( jq -r '.node_data_dir' "$config" )"
@@ -22,8 +22,8 @@ $NODE_DIR/start.sh --delete-all-blocks --genesis-json $NODE_DIR/genesis.json
 
 print_test_result() {
     T_=$1
-    T1=$(echo $T_ | cut -d ":" -f 1)
-    T2=$(echo $T_ | cut -d ":" -f 2)
+    T1=$(/bin/echo $T_ | /usr/bin/cut -d ":" -f 1)
+    T2=$(/bin/echo $T_ | /usr/bin/cut -d ":" -f 2)
     if [[ $T1 -eq 1 ]]; then
 	#echo -e "$T2 - \e[32m[OK]\e[39m" | column -t -s- 
 
@@ -42,8 +42,8 @@ print_test_result() {
 startCategoryTest(){
     DIR=$1;
 
-    echo "";
-    echo -e "\e[1;39m╔════════════════════╣ \e[1;32m Tests $1 \e[m ╠═══════════════════════════════╗\e[m \n";
+    /bin/echo "";
+    /bin/echo -e "\e[1;39m╔════════════════════╣ \e[1;32m Tests $1 \e[m ╠═══════════════════════════════╗\e[m \n";
 
     mydir=$(pwd)
     STARTTIME_GROUP=$(date +%s.%N)
@@ -56,22 +56,22 @@ startCategoryTest(){
     done
     cd $mydir
 
-    ENDTIME_GROUP=$(date +%s.%N)
-    DIFF_GROUP=$(echo "$ENDTIME_GROUP - $STARTTIME_GROUP" | bc)
+    ENDTIME_GROUP=$(/bin/date +%s.%N)
+    DIFF_GROUP=$(/bin/echo "$ENDTIME_GROUP - $STARTTIME_GROUP" | bc)
 
-    echo ""
-    echo -e "\e[1;39m┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\e[m"
-    echo " Tests: $1"
-    echo " Time: $DIFF_GROUP sec"
-    echo -e " Group Total \e[32mOK\e[39m/\e[31mFailed\e[39m/\e[1;39mTotal\e[m tests: \e[32m$TEST_OK_WALLET\e[m/\e[31m$TEST_FAILED_WALLET\e[m/\e[1;39m"$((TEST_OK_WALLET+TEST_FAILED_WALLET))"\e[m"
+    /bin/echo ""
+    /bin/echo -e "\e[1;39m┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\e[m"
+    /bin/echo " Tests: $1"
+    /bin/echo " Time: $DIFF_GROUP sec"
+    /bin/echo -e " Group Total \e[32mOK\e[39m/\e[31mFailed\e[39m/\e[1;39mTotal\e[m tests: \e[32m$TEST_OK_WALLET\e[m/\e[31m$TEST_FAILED_WALLET\e[m/\e[1;39m"$((TEST_OK_WALLET+TEST_FAILED_WALLET))"\e[m"
 
-    echo -e "\e[1;39m╚══════════════════════════════════════════════════════════════════════════════╝\e[m \n";
+    /bin/echo -e "\e[1;39m╚══════════════════════════════════════════════════════════════════════════════╝\e[m \n";
 }
 
 
 #========================================================================================================================================
 
-echo "START TESTING..."
+/bin/echo "START TESTING..."
 TEST_FAILED=0
 TEST_OK=0
 
@@ -90,15 +90,15 @@ startCategoryTest "tests/02_account"
 ENDTIME=$(date +%s.%N)
 DIFF=$(echo "$ENDTIME - $STARTTIME" | bc)
 
-echo ""
-echo ""
-echo -e "\e[92m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\e[m"
-echo -e "\e[92m▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\e[m"
-echo -e "\e[92m▒\e[m"
-echo -e "\e[92m▒\e[m  Time: $DIFF sec"
-echo -e "\e[92m▒\e[m  Total \e[32mOK\e[39m/\e[31mFailed\e[39m/\e[1;39mTotal\e[m for all tests: \e[32m$TEST_OK\e[m/\e[31m$TEST_FAILED\e[m/\e[1;39m"$((TEST_OK+TEST_FAILED))"\e[m"
-echo -e "\e[92m▒\e[m"
-echo -e "\e[92m▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\e[m"
-echo ""
+/bin/echo ""
+/bin/echo ""
+/bin/echo -e "\e[92m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\e[m"
+/bin/echo -e "\e[92m▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\e[m"
+/bin/echo -e "\e[92m▒\e[m"
+/bin/echo -e "\e[92m▒\e[m  Time: $DIFF sec"
+/bin/echo -e "\e[92m▒\e[m  Total \e[32mOK\e[39m/\e[31mFailed\e[39m/\e[1;39mTotal\e[m for all tests: \e[32m$TEST_OK\e[m/\e[31m$TEST_FAILED\e[m/\e[1;39m"$((TEST_OK+TEST_FAILED))"\e[m"
+/bin/echo -e "\e[92m▒\e[m"
+/bin/echo -e "\e[92m▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\e[m"
+/bin/echo ""
 read -n 1 -s -r -p "Press any key to continue"
-echo ""
+/bin/echo ""
