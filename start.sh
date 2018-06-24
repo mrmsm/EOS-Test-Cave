@@ -16,58 +16,55 @@ GLOBALPATH=$(dirname $(realpath $0))
 
 echo -n $'\E[0;31m'
 cat << "EOF"
-  
-          )   (                  (                                      
-       ( /(   )\ )    *   )      )\ )  *   )     (                      
-   (   )\()) (()/(  ` )  /( (   (()/(` )  /(     )\      )   )      (   
-   )\ ((_)\   /(_))  ( )(_)))\   /(_))( )(_))  (((_)  ( /(  /((    ))\  
-  ((_)  ((_) (_))   (_(_())((_) (_)) (_(_())   )\___  )(_))(_))\  /((_) 
-  | __|/ _ \ / __|  |_   _|| __|/ __||_   _|  ((/ __|((_)_ _)((_)(_))   
-  | _|| (_) |\__ \    | |  | _| \__ \  | |     | (__ / _` |\ V / / -_)  
-  |___|\___/ |___/    |_|  |___||___/  |_|      \___|\__,_| \_/  \___|  
-                                                                       
+
+          )   (                  (
+       ( /(   )\ )    *   )      )\ )  *   )     (
+   (   )\()) (()/(  ` )  /( (   (()/(` )  /(     )\      )   )      (
+   )\ ((_)\   /(_))  ( )(_)))\   /(_))( )(_))  (((_)  ( /(  /((    ))\
+  ((_)  ((_) (_))   (_(_())((_) (_)) (_(_())   )\___  )(_))(_))\  /((_)
+  | __|/ _ \ / __|  |_   _|| __|/ __||_   _|  ((/ __|((_)_ _)((_)(_))
+  | _|| (_) |\__ \    | |  | _| \__ \  | |     | (__ / _` |\ V / / -_)
+  |___|\___/ |___/    |_|  |___||___/  |_|      \___|\__,_| \_/  \___|
+
 EOF
 echo -n $'\E[0;32m'
 
 cat << "EOF"
-                .        __           ,    .             
-                |_   .  /  `._.  .._ -+- _ |   * _ ._  __
-                [_)\_|  \__.[  \_|[_) | (_)|___|(_)[ )_) 
-                   ._|         ._||                     
+
+  ▄▄▄ .    .▄▄ ·     ▄▄▄▄· ▄▄▄·    ·▄▄▄▄ ▄▄▄ .▌ ▐.▄▄ ·
+  ▀▄.▀▪    ▐█ ▀.     ▐█ ▀█▐█ ▄█    ██▪ ██▀▄.▀▪█·█▐█ ▀.
+  ▐▀▀▪▄▄█▀▄▄▀▀▀█▄    ▐█▀▀█▄██▀·    ▐█· ▐█▐▀▀▪▐█▐█▄▀▀▀█▄
+  ▐█▄▄▐█▌.▐▐█▄▪▐█    ██▄▪▐▐█▪·•    ██. ██▐█▄▄▌███▐█▄▪▐█
+   ▀▀▀ ▀█▄▀▪▀▀▀▀     ·▀▀▀▀.▀       ▀▀▀▀▀• ▀▀▀. ▀  ▀▀▀▀
 
 EOF
 #`
 
 echo -n $'\e[0;39m'
-
-
-
 echo "Preparing and clearing..."
 
 #Remove default wallets files in ~/eosio-wallet folder (to clean test)
-/bin/rm -r /home/ubuntu/eosio-wallet/*
+
+/bin/rm -rf /home/ubuntu/eosio-wallet/*
 
 # Remove logs from last testing
-/bin/rm -r $GLOBALPATH/log/*.dat
-/bin/rm -r $GLOBALPATH/log/*.log
+/bin/rm -rf $GLOBALPATH/log/*.dat
 
 print_test_result() {
     T_=$1
     T1=$(echo $T_ | cut -d ":" -f 1)
     T2=$(echo $T_ | cut -d ":" -f 2)
     if [[ $T1 -eq 1 ]]; then
-	#echo -e "$T2 - \e[32m[OK]\e[39m" | column -t -s- 
-
-	printf '\e[1;39m%-75s\e[m \e[1;32m%-25s\e[m\n' " $T2" "[OK]"
-	TEST_OK_WALLET=$(($TEST_OK_WALLET+1))
-	TEST_OK=$(($TEST_OK+1))
+        #echo -e "$T2 - \e[32m[OK]\e[39m" | column -t -s-
+        printf '\e[1;39m%-75s\e[m \e[1;32m%-25s\e[m\n' " $T2" "[OK]"
+        TEST_OK_WALLET=$(($TEST_OK_WALLET+1))
+        TEST_OK=$(($TEST_OK+1))
     else
-	#echo -e "$T2 \t \e[31m[FAILED]\e[39m"
-	printf '\e[1;39m%-75s\e[m \e[1;31m%-25s\e[m\n' " $T2" "[FAILED]"
-	TEST_FAILED_WALLET=$(($TEST_FAILED_WALLET+1))
-	TEST_FAILED=$(($TEST_FAILED+1))
+        #echo -e "$T2 \t \e[31m[FAILED]\e[39m"
+        printf '\e[1;39m%-75s\e[m \e[1;31m%-25s\e[m\n' " $T2" "[FAILED]"
+        TEST_FAILED_WALLET=$(($TEST_FAILED_WALLET+1))
+        TEST_FAILED=$(($TEST_FAILED+1))
     fi
-
 }
 
 startCategoryTest(){
@@ -83,7 +80,7 @@ startCategoryTest(){
 
     cd $1
     for f in *.sh; do
-	print_test_result "$(./$f)"
+        print_test_result "$(./$f)"
     done
     cd $mydir
 

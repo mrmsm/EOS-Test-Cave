@@ -26,4 +26,4 @@ DIR="$( jq -r '.wallet_data_dir' "$config" )"
         echo -ne "\rWallet stopped. \n"
 
     fi
-    
+
