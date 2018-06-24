@@ -44,11 +44,11 @@ echo -n $'\e[0;39m'
 echo "Preparing and clearing..."
 
 #Remove default wallets files in ~/eosio-wallet folder (to clean test)
-rm -rf $GLOBALPATH/wallet/*.wallet
+
+/bin/rm -rf /home/ubuntu/eosio-wallet/*
 
 # Remove logs from last testing
-rm -rf $GLOBALPATH/log/*.dat
-rm -rf $GLOBALPATH/log/*.log
+/bin/rm -rf $GLOBALPATH/log/*.dat
 
 print_test_result() {
     T_=$1
