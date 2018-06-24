@@ -10,8 +10,12 @@ The test runner requires `jq` and `bc`.
 
 ## Setup
 
-- Clone the repo
-- Start the wallet with `cd wallet && ./start.sh`
-- Run tests with `./start.sh`
+```console
+cd ~
+git clone https://github.com/EOS-BP-Developers/EOS-Test-Cave.git
+cd EOS-Test-Cave
+cp -r ./node ~/test
+cd wallet && ./start.sh
+```
 
-<img src="http://dev.cryptolions.io/imgs/eos_test_cave_01.jpg">
+Run tests with `./start.sh`, located in the `EOS-Test-Cave` directory
