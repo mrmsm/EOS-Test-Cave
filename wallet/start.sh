@@ -1,8 +1,10 @@
 #!/bin/bash
 
-KEOSDBINDIR="/home/ubuntu/EOS-Test-Cave/bin/bin/keosd"
-DATADIR="/home/ubuntu/eosio-wallet"
+config="../config.json"
+DIR="$( jq -r '.wallet_data_dir' "$config" )"
+
+KEOSDBINDIR="../bin/bin/keosd"
 
 echo "Starting Keosd \n";
 
-$KEOSDBINDIR/keosd --data-dir $DATADIR --config-dir $DATADIR > $DATADIR/stdout.txt 2> $DATADIR/stderr.txt &  echo $! > $DATADIR/keosd.pid
+$KEOSDBINDIR/keosd --data-dir $DIR --config-dir $DIR > $DIR/stdout.txt 2> $DIR/stderr.txt &  echo $! > $DIR/keosd.pid
