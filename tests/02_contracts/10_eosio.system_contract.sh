@@ -1,11 +1,11 @@
-TEST_NAME="Create ABP account"
+TEST_NAME="Deploy eosio.system contract"
 
 if [[ ! $GLOBALPATH ]]; then
     GLOBALPATH="$(dirname $(realpath $0))/../.."
 fi
 
 config="$GLOBALPATH/config.json"
-NAME="$( jq -r '.abp_account_name' "$config" )"
+#KEY="$( jq -r '.eosio_pub_key' "$config" )"
 
 failed(){
     echo "0:$TEST_NAME"
@@ -17,14 +17,23 @@ failed(){
 tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
 
 #----------------------
-PUB_KEY=$( cat $GLOBALPATH/log/wallet_default_key.dat | cut -d' ' -f1)
-CMD=$( $GLOBALPATH/bin/cleos.sh system newaccount eosio $NAME $PUB_KEY --stake-net "200000000.0000 EOS" --stake-cpu "200000000.0000 EOS" --buy-ram "10.0000 EOS" --transfer 2>$tpm_stderr)
+ACCOUNT="eosio"
+
+CMD=$( $GLOBALPATH/bin/cleos.sh set contract $ACCOUNT $GLOBALPATH/contracts/eosio.system 2>$tpm_stderr)
 
 ERR=$(cat $tpm_stderr)
 
 if [[ $ERR != *"executed transaction"* ]]; then
     failed "$ERR"
     rm $tpm_stderr;
-else
-    echo "1:$TEST_NAME"
 fi
+
+CMD2=$( $GLOBALPATH/bin/cleos.sh get code $ACCOUNT 1>$tpm_stderr)
+ERR=$(cat $tpm_stderr)
+if [[ $ERR != *"0000000000000000000000000000000000000000000000000000000000000000"* ]]; then
+	echo "1:$TEST_NAME"
+else
+    failed "$ERR"
+    rm $tpm_stderr;
+fi
+
