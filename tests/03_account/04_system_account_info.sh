@@ -1,13 +1,11 @@
-#!/bin/bash
-
-TEST_NAME="Get account info"
+TEST_NAME="Get system accounts info"
 
 if [[ ! $GLOBALPATH ]]; then
     GLOBALPATH="$(dirname $(realpath $0))/../.."
 fi
 
 config="$GLOBALPATH/config.json"
-NAME="$( jq -r '.abp_account_name' "$config" )"
+KEY="$( jq -r '.eosio_pub_key' "$config" )"
 
 failed(){
     echo "0:$TEST_NAME"
@@ -20,13 +18,18 @@ tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
 
 #----------------------
 
-CMD=$( $GLOBALPATH/bin/cleos.sh get account $NAME 2>$tpm_stderr)
+accounts=( eosio.bpay eosio.msig eosio.names eosio.ram eosio.ramfee eosio.saving eosio.stake eosio.token eosio.vpay );
 
-ERR=$(cat $tpm_stderr)
-
-if [[ $ERR != "" ]]; then
+for account in "${accounts[@]}"
+do
+  CMD=$( $GLOBALPATH/bin/cleos.sh get account $account 2>$tpm_stderr)
+  ERR=$(cat $tpm_stderr)
+  if [[ $ERR != "" ]]; then
     failed "$ERR"
     rm $tpm_stderr;
-else
-    echo "1:$TEST_NAME"
-fi
+    exit 1;
+  fi
+done
+
+echo "1:$TEST_NAME"
+
