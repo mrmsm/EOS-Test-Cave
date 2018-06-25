@@ -1,4 +1,4 @@
-TEST_NAME="Create ABP account"
+TEST_NAME="Create genesisblock account and transfer liquid tokens to it"
 
 . ../runner.sh
 
@@ -10,6 +10,12 @@ CMD=$( $GLOBALPATH/bin/cleos.sh system newaccount eosio $NAME $PUB_KEY --stake-n
 
 ERR=$(cat $tpm_stderr)
 
+if [[ $ERR != *"executed transaction"* ]]; then
+    failed "$ERR"
+    rm $tpm_stderr;
+fi
+CMD2=$( $GLOBALPATH/bin/cleos.sh transfer eosio $NAME "1000000.0000 EOS" "liquid tokens" 2>$tpm_stderr)
+ERR=$(cat $tpm_stderr)
 if [[ $ERR != *"executed transaction"* ]]; then
     failed "$ERR"
     rm $tpm_stderr;
