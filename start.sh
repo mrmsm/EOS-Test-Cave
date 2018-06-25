@@ -3,29 +3,30 @@
 GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
 
 /bin/echo "Preparing and clearing..."
-# Restart chain
+
 config="$GLOBALPATH/config.json"
 NODE_DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 WALLET_DIR="$( /usr/bin/jq -r '.wallet_data_dir' "$config" )"
-#Remove default wallets files in ~/eosio-wallet folder (to clean test)
+
+# Remove default wallets files in ~/eosio-wallet folder (to clean test)
 /bin/rm -r $WALLET_DIR/*
 
 # Remove logs from last testing
 /bin/rm -r $GLOBALPATH/log/*.dat
 /bin/rm -r $GLOBALPATH/log/*.log
 
-# Restart chain
-config="$GLOBALPATH/config.json"
-NODE_DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
+# Restart the wallet
+$GLOBALPATH/wallet/start.sh
 
-$NODE_DIR/start.sh --delete-all-blocks --genesis-json $NODE_DIR/genesis.json
+# Restart chain
+$GLOBALPATH/node/start.sh --delete-all-blocks --genesis-json $GLOBALPATH/node/genesis.json
 
 print_test_result() {
     T_=$1
     T1=$(/bin/echo $T_ | /usr/bin/cut -d ":" -f 1)
     T2=$(/bin/echo $T_ | /usr/bin/cut -d ":" -f 2)
     if [[ $T1 -eq 1 ]]; then
-	#echo -e "$T2 - \e[32m[OK]\e[39m" | column -t -s- 
+	#echo -e "$T2 - \e[32m[OK]\e[39m" | column -t -s-
 
 	/usr/bin/printf '\e[1;39m%-75s\e[m \e[1;32m%-25s\e[m\n' " $T2" "[OK]"
 	TEST_OK_WALLET=$(($TEST_OK_WALLET+1))

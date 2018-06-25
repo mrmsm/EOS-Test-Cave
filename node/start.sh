@@ -10,7 +10,17 @@
 ##                                                   ##
 #######################################################
 
-NODEOS=~/EOS-Test-Cave/bin/bin/nodeos
-DATADIR=~/test
-$DATADIR/stop.sh
-$NODEOS --data-dir $DATADIR --config-dir $DATADIR "$@" > $DATADIR/stdout.txt 2> $DATADIR/stderr.txt & /bin/echo $! > $DATADIR/nodeos.pid
+GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
+config="$GLOBALPATH/../config.json"
+
+DATADIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
+NODEOS="$( /usr/bin/jq -r '.node_bin' "$config" )"
+
+/bin/echo "Starting Nodeos";
+
+if [ ! -d "$DATADIR" ]; then
+	/bin/mkdir "$DATADIR"
+fi
+
+$GLOBALPATH/stop.sh
+$NODEOS --data-dir $DATADIR --config-dir $GLOBALPATH "$@" > $DATADIR/stdout.txt 2> $DATADIR/stderr.txt & /bin/echo $! > $DATADIR/nodeos.pid
