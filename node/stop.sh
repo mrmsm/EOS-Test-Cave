@@ -10,7 +10,7 @@
 ##                                                   ##
 #######################################################
 
-DIR=/home/ubuntu/test
+DIR=~/test
 
     if [ -f $DIR"/nodeos.pid" ]; then
         pid=$(/bin/cat $DIR"/nodeos.pid")

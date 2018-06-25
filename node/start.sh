@@ -10,7 +10,7 @@
 ##                                                   ##
 #######################################################
 
-NODEOS=/home/ubuntu/EOS-Test-Cave/bin/bin/nodeos
-DATADIR=/home/ubuntu/test
+NODEOS=~/EOS-Test-Cave/bin/bin/nodeos
+DATADIR=~/test
 $DATADIR/stop.sh
 $NODEOS --data-dir $DATADIR --config-dir $DATADIR "$@" > $DATADIR/stdout.txt 2> $DATADIR/stderr.txt & /bin/echo $! > $DATADIR/nodeos.pid
