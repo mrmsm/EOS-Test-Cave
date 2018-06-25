@@ -2,15 +2,11 @@
 
 TEST_NAME="Resign eosio"
 
-if [[ ! $GLOBALPATH ]]; then
-    GLOBALPATH="$(dirname $(realpath $0))/../.."
-fi
-
-config="$GLOBALPATH/config.json"
+. ../runner.sh
 
 KEY="$( jq -r '.eosio_pub_key' "$config" )"
 
-tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
+#----------------------
 
 account="eosio"
 controller="eosio.prods"
