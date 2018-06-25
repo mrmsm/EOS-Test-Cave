@@ -14,9 +14,11 @@
 #
 ###############################################################################
 
-TEST_NAME="Create EOS Key and import to wallet $NAME"
+TEST_NAME="Create EOS Key and import to wallet"
 
 . ../runner.sh
+
+NAME="$( jq -r '.wallet_test_name' "$config" )"
 
 #-------------------------------------------------------
 CMD1=($($GLOBALPATH/bin/cleos.sh create key))
