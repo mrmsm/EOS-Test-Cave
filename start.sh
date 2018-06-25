@@ -3,10 +3,12 @@
 GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
 
 /bin/echo "Preparing and clearing..."
+
 # Restart chain
 config="$GLOBALPATH/config.json"
 NODE_DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 WALLET_DIR="$( /usr/bin/jq -r '.wallet_data_dir' "$config" )"
+
 #Remove default wallets files in ~/eosio-wallet folder (to clean test)
 /bin/rm -r $WALLET_DIR/*
 
@@ -14,11 +16,7 @@ WALLET_DIR="$( /usr/bin/jq -r '.wallet_data_dir' "$config" )"
 /bin/rm -r $GLOBALPATH/log/*.dat
 /bin/rm -r $GLOBALPATH/log/*.log
 
-# Restart chain
-config="$GLOBALPATH/config.json"
-NODE_DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
-
-$NODE_DIR/start.sh --delete-all-blocks --genesis-json $NODE_DIR/genesis.json
+$GLOBALPATH/node/start.sh --delete-all-blocks --genesis-json $GLOBALPATH/node/genesis.json
 
 print_test_result() {
     T_=$1

@@ -10,7 +10,9 @@
 ##                                                   ##
 #######################################################
 
-DIR=~/test
+GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
+config="$GLOBALPATH/../config.json"
+DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 
     if [ -f $DIR"/nodeos.pid" ]; then
         pid=$(/bin/cat $DIR"/nodeos.pid")

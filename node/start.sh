@@ -14,7 +14,7 @@ GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
 config="$GLOBALPATH/../config.json"
 DATADIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 
-NODEOS="$GLOBALPATH/../bin/bin/nodeos"
+NODEOS="/usr/local/bin/nodeos"
 
 /bin/echo "Starting Nodeos";
 
@@ -23,4 +23,4 @@ if [ ! -d "$DATADIR" ]; then
 fi
 
 $GLOBALPATH/stop.sh
-$NODEOS --data-dir $DATADIR --config-dir $DATADIR "$@" > $DATADIR/stdout.txt 2> $DATADIR/stderr.txt & /bin/echo $! > $DATADIR/nodeos.pid
+$NODEOS --data-dir $DATADIR --config-dir $GLOBALPATH "$@" > $DATADIR/stdout.txt 2> $DATADIR/stderr.txt & /bin/echo $! > $DATADIR/nodeos.pid
