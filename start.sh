@@ -5,6 +5,12 @@ GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
 /bin/echo "Preparing and clearing..."
 
 config="$GLOBALPATH/config.json"
+
+if [ ! -f $config ]; then
+    echo "config.json not found!"
+    exit 1
+fi
+
 NODE_DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 WALLET_DIR="$( /usr/bin/jq -r '.wallet_data_dir' "$config" )"
 
