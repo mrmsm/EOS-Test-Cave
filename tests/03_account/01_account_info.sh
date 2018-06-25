@@ -15,6 +15,8 @@
 ###############################################################################
 TEST_NAME="Get account info"
 
+. ../runner.sh
+
 #----------------------
 
 CMD=$( $GLOBALPATH/bin/cleos.sh get account eosio 2>$tpm_stderr)

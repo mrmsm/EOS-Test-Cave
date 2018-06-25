@@ -1,22 +1,10 @@
 #!/bin/bash
 
-if [[ ! $GLOBALPATH ]]; then
-    GLOBALPATH="$(dirname $(realpath $0))/../.."
-fi
-
-config="$GLOBALPATH/config.json"
-KEY="$( jq -r '.eosio_key' "$config" )"
-
 TEST_NAME="Import eosio key to wallet"
 
-failed(){
-    echo "0:$TEST_NAME"
-    echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
-    echo "$1" >> $GLOBALPATH/log/log_error.log;
-    echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
-}
+. ../runner.sh
 
-tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
+KEY="$( jq -r '.eosio_key' "$config" )"
 
 #-------------------------------------------------------
 

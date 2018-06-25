@@ -9,7 +9,7 @@ The test runner requires `jq` and `bc`.
 ### Ubuntu
 
 ```console
-sudo apt-get install-y jq bc
+sudo apt-get install -y jq bc
 ```
 
 ## Install

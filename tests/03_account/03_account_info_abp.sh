@@ -2,21 +2,9 @@
 
 TEST_NAME="Get ABP account info"
 
-if [[ ! $GLOBALPATH ]]; then
-    GLOBALPATH="$(dirname $(realpath $0))/../.."
-fi
+. ../runner.sh
 
-config="$GLOBALPATH/config.json"
 NAME="$( jq -r '.abp_account_name' "$config" )"
-
-failed(){
-    echo "0:$TEST_NAME"
-    echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
-    echo "$1" >> $GLOBALPATH/log/log_error.log;
-    echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
-}
-
-tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
 
 #----------------------
 

@@ -1,20 +1,8 @@
 TEST_NAME="Create system accounts"
 
-if [[ ! $GLOBALPATH ]]; then
-    GLOBALPATH="$(dirname $(realpath $0))/../.."
-fi
+. ../runner.sh
 
-config="$GLOBALPATH/config.json"
 KEY="$( jq -r '.eosio_pub_key' "$config" )"
-
-failed(){
-    echo "0:$TEST_NAME"
-    echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
-    echo "$1" >> $GLOBALPATH/log/log_error.log;
-    echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
-}
-
-tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
 
 #----------------------
 
