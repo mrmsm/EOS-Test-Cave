@@ -20,7 +20,7 @@ if [[ ! $GLOBALPATH ]]; then
 fi
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -50,7 +50,7 @@ ERR=$(cat $tpm_stderr)
 
 if [[ "$CMD" == *"$PUB_KEY"* ]]; then
     echo "$PUB_KEY" >> $GLOBALPATH/log/wallet_create_key_def_r1.dat
-    echo "1:$TEST_NAME"
+    echo "0:$TEST_NAME"
 else
     failed "Key not found in default wallet"
 fi

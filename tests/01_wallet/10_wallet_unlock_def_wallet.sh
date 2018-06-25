@@ -20,7 +20,7 @@ if [[ ! $GLOBALPATH ]]; then
 fi
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -40,7 +40,7 @@ if [[ $ERR != "" ]]; then
 else
     DATA=($CMD)
     if [[ "${DATA[0]}" == "Unlocked:" && "${DATA[1]}" == "default" ]]; then
-        echo "1:$TEST_NAME"
+        echo "0:$TEST_NAME"
     else
         failed "Wallet not unlocked";
     fi

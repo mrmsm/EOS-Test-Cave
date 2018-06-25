@@ -1,19 +1,20 @@
 #!/bin/bash
 ################################################################################
 #
-# EOS Cleos wrapper
+#  EOS Testing Cave
 #
-# Created by http://CryptoLions.io
+#  Made by Cryptolions.io (2018)
+#  Modify EOS BP Developer Team (https://github.com/EOS-BP-Developers)
 #
-# Git Hub: https://github.com/CryptoLions
-# Eos Network Monitor: http://eosnetworkmonitor.io/
+#  for automated testing EOS Software
 #
-###############################################################################
+#  Github : https://github.com/EOS-BP-Developers/EOS-Test-Cave
+#
+################################################################################
 
 SCRIPTPATH=$(/usr/bin/dirname $(realpath $0))""
-config="$SCRIPTPATH/../config.json"
-WALLETHOST="$( /usr/bin/jq -r '.walletAddr' "$config" )"
-NODEHOST="$( /usr/bin/jq -r '.nodeos' "$config" )"
+conf_file="$SCRIPTPATH/../config.conf"
 
+[ -f $conf_file ] && . $conf_file
 
-$SCRIPTPATH/bin/cleos -u http://$NODEHOST --wallet-url http://$WALLETHOST "$@"
+$BIN_DIR/cleos -u http://$BOOT_HOST:$BOOT_HTTP --wallet-url http://$WALLET_HOST "$@"

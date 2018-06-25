@@ -21,7 +21,7 @@ fi
 
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -47,7 +47,7 @@ else
     #NAME_KEY=($(cat $GLOBALPATH/log/wallet_name_testwallet_key.dat))
 
     if [[ "$DATA" != *"${DEFF_KEY[0]}"* ]]; then
-        echo "1:$TEST_NAME"
+        echo "0:$TEST_NAME"
     else
         failed "Wallet wasn't locked";
     fi

@@ -21,7 +21,7 @@ fi
 
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -41,7 +41,7 @@ else
     DATA=$($GLOBALPATH/bin/cleos.sh wallet keys 2>$tpm_stderr)
     ERR=$(cat $tpm_stderr)
     if [[ $ERR = *"Error 3120003: Locked wallet"* ]]; then
-        echo "1:$TEST_NAME"
+        echo "0:$TEST_NAME"
     else
         failed "There is still open wallet";
     fi

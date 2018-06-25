@@ -1,0 +1,37 @@
+# Define ECHO function
+echo_f ()
+{
+  message=${1:-"[ Failed ]"}
+  printf "\033[1;31m%s\033[0m\n" "$message"
+}
+echo_s ()
+{
+  message=${1:-"[ Success ]"}
+  printf "\033[1;32m%s\033[0m\n" "$message"
+}
+
+print_out() {
+  if [ $1 -eq 1 ]; then
+    printf '\033[1;39m%-75s\033[m \033[1;31m%-25s\033[m\n' " $2" "[FAILED]"
+  else
+    printf '\033[1;39m%-75s\033[m \033[1;32m%-25s\033[m\n' " $2" "[OK]"
+  fi
+}
+
+print_test_result() {
+    T_=$1
+    T1=$(/bin/echo $T_ | /usr/bin/cut -d ":" -f 1)
+    T2=$(/bin/echo $T_ | /usr/bin/cut -d ":" -f 2)
+    if [ $T1 -eq 0 ]; then
+        /usr/bin/printf '\e[1;39m%-75s\e[m \e[1;32m%-25s\e[m\n' " $T2" "[OK]"
+        TEST_OK_GROUP=$(($TEST_OK_GROUP+1))
+        TEST_OK=$(($TEST_OK+1))
+    else
+        /usr/bin/printf '\e[1;39m%-75s\e[m \e[1;31m%-25s\e[m\n' " $T2" "[FAILED]"
+        TEST_FAILED_GROUP=$(($TEST_FAILED_GROUP+1))
+        TEST_FAILED=$(($TEST_FAILED+1))
+        echo "$1" >> $BASE_DIR/log/cave_result.log
+    fi
+
+}
+

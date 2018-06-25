@@ -1,0 +1,173 @@
+# init boot node
+init_boot_node(){
+  # Check Boot directory
+  [ ! -d $DATA_DIR/boot ] && mkdir -p $DATA_DIR/boot
+  if [ -z $BOOT_PRIV ]; then
+    eval $(echo -n $($CLE create key) | awk '{print "PRIV_KEY="$3";PUB_KEY="$6}')
+  else
+    PRIV_KEY=$BOOT_PRIV
+    PUB_KEY=$BOOT_PUB
+  fi
+  INIT_DATE=$(date +"%Y-%m-01T00:00:00")
+  
+  # SET config.ini for boot node
+  sed -e "s/__PRIVKEY__/$PRIV_KEY/g" \
+  -e "s/__BOOT_HOST__/127.0.0.1/g" \
+  -e "s/__BOOT_HTTP__/$BOOT_HTTP/g" \
+  -e "s/__BOOT_P2P__/$BOOT_P2P/g" \
+  -e "s/__PUBKEY__/$PUB_KEY/g" < $BASE_DIR/template/config.boot  > $DATA_DIR/boot/config.ini
+  
+  # Check BNET Enable
+  if [ $BNET_USE -eq 1 ]
+  then
+    BNET_THREAD=$(($(cat /proc/cpuinfo | grep processor | wc -l)/2))
+    [ $BNET_THREAD -eq 0 ] && BNET_THREAD=1
+    echo '
+    plugin = eosio::bnet_plugin
+    bnet-endpoint = 0.0.0.0:'$BNET_PORT'
+    bnet-threads = '$BNET_THREAD'
+    bnet-connect = localhost:'$BNET_PORT'
+    bnet-no-trx = false' >> $DATA_DIR/boot/config.ini
+  fi
+  
+  # SET Genesis.json for boot node
+  sed -e "s/__PUBKEY__/$PUB_KEY/g" \
+  -e "s/__INIT_DATE__/$INIT_DATE/g" < $BASE_DIR/template/genesis.boot > $DATA_DIR/boot/genesis.json
+  
+  # SET run.sh for boot node
+  sed -e "s+__DATA__+$DATA_DIR/boot+g" \
+      -e "s+__BIN__+$BIN_DIR+g" \
+      -e "s/__PROG__/nodeos/g" < $BASE_DIR/template/run.sh > $DATA_DIR/boot/run.sh
+  chmod +x $DATA_DIR/boot/run.sh
+  cp -a $DATA_DIR/boot/genesis.json $BASE_DIR//template/genesis.json
+  $DATA_DIR/boot/run.sh start
+  sleep 1
+  
+  /bin/echo "";
+  /bin/echo -e "\e[1;39m╔════════════════════╣ \e[1;32m Tests BOOT process \e[m ╠═══════════════════════════════╗\e[m \n";
+  STARTTIME_GROUP=$(/bin/date +%s.%N)
+  TEST_OK_GROUP=0
+  TEST_FAILED_GROUP=0
+
+  $CLE wallet create -n eosio > $DATA_DIR/boot/boot.wpk 2>>$DATA_DIR/boot/stdout.txt
+  print_test_result "$?:Create EOSIO wallet"
+  
+  $CLE wallet import -n eosio $PRIV_KEY >> $DATA_DIR/boot/stdout.txt 2>&1
+  print_test_result "$?:Import EOSIO Key"
+  
+  $CLE set contract eosio $CONTRACT_DIR/eosio.bios/ >> $DATA_DIR/boot/stdout.txt 2>&1
+  print_test_result "$?:Set Contract eosio.bios"
+  
+  for _account_name in $SYSTEM_ACCOUNT;do
+    $CLE wallet create -n ${_account_name} > $DATA_DIR/boot/${_account_name}.wpk
+    print_test_result "$?:  Create ${_account_name} wallet"
+  
+    $CLE wallet import -n ${_account_name} "${PRIV_KEY}" >> $DATA_DIR/boot/stdout.txt 2>&1
+    print_test_result "$?:  Import ${_account_name} Key"
+  
+    $CLE create account eosio ${_account_name} "${PUB_KEY}" "${PUB_KEY}" >> $DATA_DIR/boot/stdout.txt 2>&1
+    print_test_result "$?:  Create Account ${_account_name}"
+  
+    $CLE push action eosio setpriv '{"account":"'${_account_name}'","is_priv":1}' -p eosio >> $DATA_DIR/boot/stdout.txt 2>&1
+    print_test_result "$?:  Set Privilege ${_account_name} Account"
+  done
+  
+  $CLE set contract eosio.token $CONTRACT_DIR/eosio.token/ -p eosio.token >> $DATA_DIR/boot/stdout.txt 2>&1
+  print_test_result "$?:Set Contract eosio.token"
+  
+  $CLE set contract eosio.msig $CONTRACT_DIR/eosio.msig/ -p eosio.msig >> $DATA_DIR/boot/stdout.txt 2>&1
+  print_test_result "$?:Set Contract eosio.msig"
+  
+  $CLE push action eosio.token create '["eosio", "500000000000.0000 EOS", 0, 0, 0]' -p eosio.token  >> $DATA_DIR/boot/stdout.txt 2>&1
+  print_test_result "$?:Create EOS Token"
+  
+  $CLE push action eosio.token issue '["eosio","1000100000.0000 EOS","Inittialize EOS Token"]' -p eosio  >> $DATA_DIR/boot/stdout.txt 2>&1
+  print_test_result "$?:Issue EOS Token"
+
+  printf '{\n  "version": "%s",\n  "schedule": [\n' $(date +%s) > $DATA_DIR/boot/bp.json
+  for INF in {a..u};do
+    $CLE create account eosio genesisnode${INF} ${PUB_KEY} ${PUB_KEY} >> $DATA_DIR/boot/stdout.txt 2>&1
+    print_test_result "$?:  Create Appointment BP account - genesisnode${INF}"
+   
+    if [ $INF == "u" ]; then
+      printf '    {"producer_name":"%s","block_signing_key":"%s"}\n' genesisnode${INF} ${PUB_KEY} >> $DATA_DIR/boot/bp.json
+    else
+      printf '    {"producer_name":"%s","block_signing_key":"%s"},\n' genesisnode${INF} ${PUB_KEY} >> $DATA_DIR/boot/bp.json
+    fi
+  done
+  echo "  ]}" >> $DATA_DIR/boot/bp.json
+  sleep 1
+
+  $CLE push action eosio setprods "$(cat $DATA_DIR/boot/bp.json)" -p eosio >> $DATA_DIR/boot/stdout.txt 2>&1
+  print_test_result "$?:Set Producer for ABP"
+
+  _set_abp_check=1;
+  while true; do
+    if [ $(tail -n 2 $DATA_DIR/boot/stderr.txt | grep -e "signed by genesisnode" | wc -l) -ne 0 ]; then
+      _set_abp_check=0;
+      break;
+    fi
+  done
+  print_test_result "$_set_abp_check:Check ABP nodes create blocks"
+  
+  $CLE set contract eosio $CONTRACT_DIR/eosio.system -x 300 -p eosio >> $DATA_DIR/boot/stdout.txt 2>&1
+  print_test_result "$?:Update eosio.system Contract on eosio account"
+
+  migration_snapshot
+  print_test_result "$?:Migration Snapshot account (${T_END} accounts)" 
+
+  ENDTIME_GROUP=$(/bin/date +%s.%N)
+  DIFF_GROUP=$(/bin/echo "$ENDTIME_GROUP - $STARTTIME_GROUP" | /usr/bin/bc)
+
+  /bin/echo ""
+  /bin/echo -e "\e[1;39m┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\e[m"
+  /bin/echo " Tests: $1"
+  /bin/echo " Time: $DIFF_GROUP sec"
+  /bin/echo -e " Group Total \e[32mOK\e[39m/\e[31mFailed\e[39m/\e[1;39mTotal\e[m tests: \e[32m$TEST_OK_GROUP\e[m/\e[31m$TEST_FAILED_GROUP\e[m/\e[1;39m"$((TEST_OK_GROUP+TEST_FAILED_GROUP))"\e[m"
+  
+  /bin/echo -e "\e[1;39m╚══════════════════════════════════════════════════════════════════════════════╝\e[m \n";
+} 
+
+function ProgressBar {
+    let _progress=(${1}*100/${2}*100)/100
+    let _done=(${_progress}*4)/10
+    let _left=40-$_done
+    _fill=$(printf "%${_done}s")
+    _empty=$(printf "%${_left}s")
+
+    printf "\r   Progress : [${_fill// /#}${_empty// /-}] ${_progress}%% (${1}/${2}, Success:$3, Failed: $4)"
+}
+
+migration_snapshot() { 
+  SUCC_CNT=0
+  FAIL_CNT=0
+  if [ -f $SNAPSHOT_FILE ]; then
+    [ $SNAPSHOT_BREAK -eq 0 ] && T_END=$(cat $SNAPSHOT_FILE | wc -l) || T_END=$SNAPSHOT_BREAK
+    while IFS=, read EOS_PRIVKEY EOS_PUBKEY EOS_ACCOUNT AMOUNT; do
+      ((CNT++))
+      TRN_FLAG=0
+      SUCC_FLAG=0
+      if [ $(echo "${AMOUNT}/31" | bc) -gt 1 ]; then
+        TRN_AMT="30.0000"
+        AMOUNT=$(echo "scale=4;$AMOUNT-$TRN_AMT" |bc);
+        STAKE_NET=$(echo "scale=4;$AMOUNT/2" | bc);
+        STAKE_CPU=$(echo "scale=4;$AMOUNT-$STAKE_NET"|bc);
+      else
+        STAKE_NET=$(echo "scale=4;$AMOUNT/2" | bc);
+        STAKE_CPU=$(echo "scale=4;$AMOUNT-$STAKE_NET"|bc);
+        TRN_FLAG=1
+      fi
+      $CLE system newaccount eosio $EOS_ACCOUNT $EOS_PUBKEY $EOS_PUBKEY --stake-net "${STAKE_NET} EOS" --stake-cpu "${STAKE_CPU} EOS" --buy-ram-kbytes 8 --transfer >> $DATA_DIR/boot/stdout.txt 2>&1
+      SUCC_FLAG=$?
+      if [ $TRN_FLAG -eq 0 ]; then
+        $CLE transfer eosio $EOS_ACCOUNT "10.0000 EOS" "Init coin" >> $DATA_DIR/boot/stdout.txt 2>&1
+        SUCC_FLAG=$?
+      fi
+      [ $SUCC_FLAG -eq 0 ] && ((SUCC_CNT+=1)) || ((FAIL_CNT+=1))
+      ProgressBar ${CNT} ${T_END} ${SUCC_CNT} ${FAIL_CNT}
+      [ $CNT -eq $T_END ] && break;
+    done < <( cat $SNAPSHOT_FILE )
+    echo ""
+    return $FAIL_CNT
+  fi
+}

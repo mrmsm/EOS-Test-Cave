@@ -17,13 +17,13 @@ if [[ ! $GLOBALPATH ]]; then
     GLOBALPATH="$(dirname $(realpath $0))/../.."
 fi
 
-config="$GLOBALPATH/config.json"
-NAME="$( jq -r '.wallet_test_name' "$config" )"
+[ -z $BASE_DIR ] && . "$GLOBALPATH/config.conf"
+NAME="$wallet_test_name"
 
 TEST_NAME="Wallet unlock wallet name: $NAME"
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -43,7 +43,7 @@ if [[ $ERR != "" ]]; then
 else
     DATA=($CMD)
     if [[ "${DATA[0]}" == "Unlocked:" && "${DATA[1]}" == "$NAME" ]]; then
-        echo "1:$TEST_NAME"
+        echo "0:$TEST_NAME"
     else
         failed "Wallet name $NAME is not unlocked";
     fi

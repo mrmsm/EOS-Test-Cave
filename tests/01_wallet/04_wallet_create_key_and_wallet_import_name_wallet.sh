@@ -17,13 +17,13 @@ if [[ ! $GLOBALPATH ]]; then
     GLOBALPATH="$(dirname $(realpath $0))/../.."
 fi
 
-config="$GLOBALPATH/config.json"
-NAME="$( jq -r '.wallet_test_name' "$config" )"
+[ -z $BASE_DIR ] && . "$GLOBALPATH/config.conf"
+NAME="$wallet_test_name"
 
 TEST_NAME="Create EOS Key and import to wallet $NAME"
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -47,7 +47,7 @@ else
     RES_PUB_KEY=($CMD)
 
     if [[ "${RES_PUB_KEY[4]}" == "$PUB_KEY" ]]; then
-        echo "1:$TEST_NAME"
+        echo "0:$TEST_NAME"
 	echo "$PUB_KEY $PRIV_KEY" >> "$GLOBALPATH/log/wallet_name_"$NAME"_key.dat"
     else
         failed "Created Pub Key ($PUB_KEY) != Imported (${RES_PUB_KEY[4]})"

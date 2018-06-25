@@ -18,11 +18,11 @@ TEST_NAME="Are keys list disabled for locked wallets"
 if [[ ! $GLOBALPATH ]]; then
     GLOBALPATH="$(dirname $(realpath $0))/../.."
 fi
-config="$GLOBALPATH/config.json"
-NAME="$( jq -r '.wallet_test_name' "$config" )"
+[ -z $BASE_DIR ] && . "$GLOBALPATH/config.conf"
+NAME="$wallet_test_name"
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -39,7 +39,7 @@ ERR=$(cat $tpm_stderr)
 rm $tpm_stderr;
     
 if [[ "$ERR" == *"Locked wallet"* ]]; then
-    echo "1:$TEST_NAME"
+    echo "0:$TEST_NAME"
 else
     failed "Some keys still listed.";
 fi

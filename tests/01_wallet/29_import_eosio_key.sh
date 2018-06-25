@@ -4,13 +4,13 @@ if [[ ! $GLOBALPATH ]]; then
     GLOBALPATH="$(dirname $(realpath $0))/../.."
 fi
 
-config="$GLOBALPATH/config.json"
-KEY="$( jq -r '.eosio_key' "$config" )"
+[ -z $BASE_DIR ] && . "$GLOBALPATH/config.conf"
+KEY="$eosio_key"
 
 TEST_NAME="Import eosio key to wallet"
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -28,5 +28,5 @@ if [[ $ERR != "" ]]; then
     failed "$ERR"
     rm $tpm_stderr
 else
-        echo "1:$TEST_NAME"
+        echo "0:$TEST_NAME"
 fi

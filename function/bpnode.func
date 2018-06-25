@@ -1,0 +1,117 @@
+# Initialize Block Producer node directory
+init_bp_node() { 
+
+  for((x=1;x<=${#PDNAME[@]};x++));do
+    eval $( awk -F"|" '{print "PNAME=\""$1"\" HOSTNAME="$2" HTTP_PORT="$3" P2P_PORT="$4" BNET_PORT="$5" BP_URL="$6}' <<< ${PDNAME[$x]})
+
+    if [ $(echo $PNAME | wc -c) -ne 13 ]; then
+      echo "The EOS account must be 12 characters."
+      exit 1
+    fi
+
+    if [ $(node_svc_check "${HOSTNAME}:${HTTP_PORT}") -eq 1 ]
+    then
+      print_out "${PNAME} node already running."
+      continue;
+    else
+      [ -d ${DATA_DIR}/bp_${PNAME} ] && rm -rf ${DATA_DIR}/bp_${PNAME}/* || mkdir -p ${DATA_DIR}/bp_${PNAME}
+
+      $CLE create key > ${DATA_DIR}/bp_${PNAME}/${PNAME}.key
+      # Set Env PUB/PRIV Key
+      eval $(echo -n $(cat ${DATA_DIR}/bp_${PNAME}/${PNAME}.key) | awk '{print "PUB_KEY="$3";PRIV_KEY="$6}')
+
+      # Set config.ini for BP node
+      sed -e "s/__PUBKEY__/$PUB_KEY/g" \
+          -e "s/__PRIVKEY__/$PRIV_KEY/g" \
+          -e "s/__HTTPPORT__/${HTTP_PORT}/g" \
+          -e "s/__HOSTNAME__/${HOSTNAME}/g" \
+          -e "s/__P2PPORT__/${P2P_PORT}/g" \
+          -e "s/__NODENAME__/cave-${PNAME}/g" \
+          -e "s/#__BOOT_PEER__/p2p-peer-address=${BOOT_HOST}:${BOOT_P2P}/g" \
+          -e "s/__PDNAME__/${PNAME}/g" < $BASE_DIR/template/config.ini > $DATA_DIR/bp_$PNAME/config.ini
+
+      # Set run.sh for BP node
+      sed -e "s+__DATA__+$DATA_DIR/bp_$PNAME+g" \
+          -e "s+__BIN__+$BIN_DIR+g" \
+          -e "s/__PROG__/nodeos/g"  < $BASE_DIR/template/run.sh > $DATA_DIR/bp_$PNAME/run.sh
+      chmod 0755 $DATA_DIR/bp_$PNAME/run.sh
+
+      # Deploy genesis.json
+      if [ -f $BASE_DIR/template/genesis.json ]; then
+        cp -a $BASE_DIR/template/genesis.json $DATA_DIR/bp_$PNAME/genesis.json
+      else
+        echo_f "$BASE_DIR/template/genesis.json file is not exists. Please run boot process first"
+        exit 1
+      fi
+      # DEFINE Peer Info
+      [ -z $PPL ] && PPL="p2p-peer-address=${HOSTNAME}:${P2P_PORT}" || PPL="$PPL\np2p-peer-address=${HOSTNAME}:${P2P_PORT}"
+      # DEFINE BNET Peer Info
+      if [ $BNET_USE == 1 ]; then
+        [ -z $BNETLIST ] && BNETLIST="bnet-connect=${HOSTNAME}:${BNET_PORT}" || BNETLIST="$BNETLIST\nbnet-connect=${HOSTNAME}:${BNET_PORT}"
+      fi
+    fi
+  done
+
+  # Set peer list in config.ini
+  for((x=1;x<=${#PDNAME[@]};x++));
+  do
+    PNAME=$( awk -F"|" '{print $1}' <<< ${PDNAME[$x]})
+    perl -p  -i -e "s/#__P2P_PEER_LIST__/$PPL/g" $DATA_DIR/bp_$PNAME/config.ini
+    # Check BNET Enable
+    if [ $BNET_USE -eq 1 ]
+    then
+      BNET_THREAD=$(($(cat /proc/cpuinfo | grep processor | wc -l)/2))
+      [ $BNET_THREAD -eq 0 ] && BNET_THREAD=1
+      echo '
+	plugin = eosio::bnet_plugin
+	bnet-endpoint = 0.0.0.0:'$BNET_PORT'
+	bnet-threads = '$BNET_THREAD'
+	'$BNETLIST'
+	bnet-no-trx = false' >> $DATA_DIR/bp_$PNAME/config.ini
+    fi
+    $DATA_DIR/bp_$PNAME/run.sh start
+  done
+}
+
+bp_validation() { 
+  /bin/echo "";
+  /bin/echo -e "\e[1;39m╔════════════════════╣ \e[1;32m Tests BlockProducer process \e[m ╠═══════════════════════════════╗\e[m \n";
+  STARTTIME_GROUP=$(/bin/date +%s.%N)
+  TEST_OK_GROUP=0
+  TEST_FAILED_GROUP=0
+
+  eval $(grep "signature" $DATA_DIR/boot/config.ini | awk -F"=|:|\ " '{print "CR_PUB_KEY="$4" CR_PRIV_KEY="$6" CR_NAME=eosio"}')
+  if [ $($CLE wallet list | grep $CR_NAME | wc -l ) -eq 0 ]; then
+    $CLE wallet create -n $CR_NAME > $WALLET_DIR/$CR_NAME.wpk 2>/dev/null
+    print_test_result "$?:Wallet create for producer parents account"
+
+    $CLE wallet import -n $CR_NAME $CR_PRIV_KEY >> $LOG_DIR/cave_result.log 2>&1
+    print_test_result "$?:Parents account private key import"
+  fi
+  
+  for((x=1;x<=${#PDNAME[@]};x++)); do
+    eval $(awk -F"|" '{print "PNAME=\""$1"\" HOSTNAME="$2" HTTP_PORT="$3" P2P_PORT="$4" BNET_PORT="$5" BP_URL="$6}' <<< ${PDNAME[$x]})
+    eval $(echo -n $(cat $DATA_DIR/bp_$PNAME/$PNAME.key) | awk '{print "PRIV_KEY="$3" PUB_KEY="$6}')
+
+    $CLE system newaccount --buy-ram-kbytes 8 --stake-net "100.0000 EOS" --stake-cpu "100.0000 EOS" $CR_NAME $PNAME $PUB_KEY $PUB_KEY >> $DATA_DIR/bp_$PNAME/stdout.txt 2>>$LOG_DIR/cave_result.log
+    print_test_result "$?:Create Producer account - $PNAME by $CR_NAME" 
+   
+    $CLE wallet create -n $PNAME > $WALLET_DIR/$PNAME.wpk >> $DATA_DIR/bp_$PNAME/stdout.txt 2>>$LOG_DIR/cave_result.log
+    print_test_result "$?:Wallet create producer account ($PNAME)"
+
+    $CLE wallet import -n $PNAME $PRIV_KEY >> $DATA_DIR/bp_$PNAME/stdout.txt 2>>$LOG_DIR/cave_result.log
+    print_test_result "$?:Producer account private key import($PNAME)"
+
+    $CLE system regproducer $PNAME $PUB_KEY "$BP_URL" -p $PNAME >> $DATA_DIR/bp_$PNAME/stdout.txt 2>>$LOG_DIR/cave_result.log
+    print_test_result "$?:Register Block Producer ($PNAME)"
+    sleep 1
+  done
+  /bin/echo ""
+  /bin/echo -e "\e[1;39m┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\e[m"
+  /bin/echo " Tests: $1"
+  /bin/echo " Time: $DIFF_GROUP sec"
+  /bin/echo -e " Group Total \e[32mOK\e[39m/\e[31mFailed\e[39m/\e[1;39mTotal\e[m tests: \e[32m$TEST_OK_GROUP\e[m/\e[31m$TEST_FAILED_GROUP\e[m/\e[1;39m"$((TEST_OK_GROUP+TEST_FAILED_GROUP))"\e[m"
+
+  /bin/echo -e "\e[1;39m╚══════════════════════════════════════════════════════════════════════════════╝\e[m \n";
+}
+

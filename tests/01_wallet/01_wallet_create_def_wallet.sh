@@ -22,7 +22,7 @@ fi
 
 
 failed(){
-    echo "0:$TEST_NAME"
+    echo "1:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
     echo "$1" >> $GLOBALPATH/log/log_error.log;
     echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
@@ -42,7 +42,7 @@ if [[ $ERR != "" ]]; then
 else
     WALLET_PASS=$(echo $CMD | awk -F\" '{ print $2 }')
     echo $WALLET_PASS > $GLOBALPATH/log/wallet_default_password.dat 
-    echo "1:$TEST_NAME"
+    echo "0:$TEST_NAME"
 
 
 fi
