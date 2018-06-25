@@ -13,23 +13,12 @@
 #
 #
 ###############################################################################
-if [[ ! $GLOBALPATH ]]; then
-    GLOBALPATH="$(dirname $(realpath $0))/../.."
-fi
 
-config="$GLOBALPATH/config.json"
+TEST_NAME="Create EOS Key and import to wallet"
+
+. ../runner.sh
+
 NAME="$( jq -r '.wallet_test_name' "$config" )"
-
-TEST_NAME="Create EOS Key and import to wallet $NAME"
-
-failed(){
-    echo "0:$TEST_NAME"
-    echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
-    echo "$1" >> $GLOBALPATH/log/log_error.log;
-    echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
-}
-
-tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
 
 #-------------------------------------------------------
 CMD1=($($GLOBALPATH/bin/cleos.sh create key))

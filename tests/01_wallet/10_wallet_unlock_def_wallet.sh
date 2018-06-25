@@ -15,18 +15,7 @@
 ###############################################################################
 TEST_NAME="Wallet unlock default wallet"
 
-if [[ ! $GLOBALPATH ]]; then
-    GLOBALPATH="$(dirname $(realpath $0))/../.."
-fi
-
-failed(){
-    echo "0:$TEST_NAME"
-    echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
-    echo "$1" >> $GLOBALPATH/log/log_error.log;
-    echo "---------------------------------" >> $GLOBALPATH/log/log_error.log;
-}
-
-tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
+. ../runner.sh
 
 #----------------------------------------------------------------------------------------------
 WPASS=$(cat $GLOBALPATH/log/wallet_default_password.dat)
