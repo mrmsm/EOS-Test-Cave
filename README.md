@@ -2,8 +2,6 @@
 
 Automated EOS Testing scripts.
 
-These are only first steps in creating test scripts scenarios.
-
 ## Dependencies
 
 The test runner requires `jq` and `bc`.
