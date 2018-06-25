@@ -12,9 +12,9 @@
 
 GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
 config="$GLOBALPATH/../config.json"
-DATADIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 
-NODEOS="/usr/local/bin/nodeos"
+DATADIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
+NODEOS="$( /usr/bin/jq -r '.node_bin' "$config" )"
 
 /bin/echo "Starting Nodeos";
 

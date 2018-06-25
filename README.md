@@ -6,14 +6,32 @@ Automated EOS Testing scripts.
 
 The test runner requires `jq` and `bc`.
 
-## Setup
+### Ubuntu
 
 ```console
-cd ~
-git clone https://github.com/EOS-BP-Developers/EOS-Test-Cave.git
-cd EOS-Test-Cave
-cp -r ./node ~/test
-cd wallet && ./start.sh
+sudo apt-get install-y jq bc
 ```
 
-Run tests with `./start.sh`, located in the `EOS-Test-Cave` directory
+## Install
+
+```console
+git clone https://github.com/EOS-BP-Developers/EOS-Test-Cave.git
+```
+
+## Config
+
+Use the dist:
+
+```console
+cp config.json.dist config.json
+```
+
+And point the `node_bin` to your local install.
+
+## Running Tests
+
+In the root project directory, tests are executed with:
+
+```console
+./start.sh
+```

@@ -3,7 +3,7 @@
  "nodeos": "127.0.0.1:18888",
  "wallet_data_dir": "/tmp/eosio-wallet",
  "node_data_dir": "/tmp/node-data",
-
+ "node_bin": "/usr/local/bin/nodeos",
  "wallet_test_name": "testwallet",
  "abp_account_name_": "genesisblock",
  "test_account_name": "testaccount1",
