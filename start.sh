@@ -11,8 +11,23 @@ if [ ! -f $config ]; then
     exit 1
 fi
 
+if ! [ -x "$(command -v jq)" ]; then
+  echo 'Error: jq is not installed.' >&2
+  exit 1
+fi
+
+if ! [ -x "$(command -v bc)" ]; then
+  echo 'Error: bc is not installed.' >&2
+  exit 1
+fi
+
 NODE_DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 WALLET_DIR="$( /usr/bin/jq -r '.wallet_data_dir' "$config" )"
+
+if [ -z "$NODE_DIR" || -z "$WALLET_DIR"]; then
+    echo "Invalid directory locations for nodeos and wallet"
+    exit 1
+fi
 
 # Remove default wallets files in ~/eosio-wallet folder (to clean test)
 /bin/rm -r $WALLET_DIR/*
@@ -32,16 +47,16 @@ print_test_result() {
     T1=$(/bin/echo $T_ | /usr/bin/cut -d ":" -f 1)
     T2=$(/bin/echo $T_ | /usr/bin/cut -d ":" -f 2)
     if [[ $T1 -eq 1 ]]; then
-	#echo -e "$T2 - \e[32m[OK]\e[39m" | column -t -s-
+    #echo -e "$T2 - \e[32m[OK]\e[39m" | column -t -s-
 
-	/usr/bin/printf '\e[1;39m%-75s\e[m \e[1;32m%-25s\e[m\n' " $T2" "[OK]"
-	TEST_OK_WALLET=$(($TEST_OK_WALLET+1))
-	TEST_OK=$(($TEST_OK+1))
+    /usr/bin/printf '\e[1;39m%-75s\e[m \e[1;32m%-25s\e[m\n' " $T2" "[OK]"
+    TEST_OK_WALLET=$(($TEST_OK_WALLET+1))
+    TEST_OK=$(($TEST_OK+1))
     else
-	#echo -e "$T2 \t \e[31m[FAILED]\e[39m"
-	/usr/bin/printf '\e[1;39m%-75s\e[m \e[1;31m%-25s\e[m\n' " $T2" "[FAILED]"
-	TEST_FAILED_WALLET=$(($TEST_FAILED_WALLET+1))
-	TEST_FAILED=$(($TEST_FAILED+1))
+    #echo -e "$T2 \t \e[31m[FAILED]\e[39m"
+    /usr/bin/printf '\e[1;39m%-75s\e[m \e[1;31m%-25s\e[m\n' " $T2" "[FAILED]"
+    TEST_FAILED_WALLET=$(($TEST_FAILED_WALLET+1))
+    TEST_FAILED=$(($TEST_FAILED+1))
     fi
 
 }
@@ -59,7 +74,7 @@ startCategoryTest(){
 
     cd $1
     for f in *.sh; do
-	print_test_result "$(./$f)"
+    print_test_result "$(./$f)"
     done
     cd $mydir
 
