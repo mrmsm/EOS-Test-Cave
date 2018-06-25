@@ -14,6 +14,8 @@ if [[ ! $GLOBALPATH ]]; then
     GLOBALPATH="$(dirname $(realpath $0))/../.."
 fi
 
+config="$GLOBALPATH/config.json"
+
 failed(){
     echo "0:$TEST_NAME"
     echo "$TEST_NAME - Failed" >> $GLOBALPATH/log/log_error.log;
