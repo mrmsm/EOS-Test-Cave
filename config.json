@@ -1,8 +1,8 @@
 {
  "walletAddr": "127.0.0.1:8888",
  "nodeos": "127.0.0.1:18888",
- "wallet_data_dir": "/home/ubuntu/eosio-wallet",
- "node_data_dir": "/home/ubuntu/test",
+ "wallet_data_dir": "/tmp/eosio-wallet",
+ "node_data_dir": "/tmp/node-data",
 
  "wallet_test_name": "testwallet",
  "abp_account_name_": "genesisblock",
