@@ -17,4 +17,4 @@ before_install:
 script:
 - pwd
 - ls -lah
-- /bin/bash start.sh
+- sudo ./start.sh
