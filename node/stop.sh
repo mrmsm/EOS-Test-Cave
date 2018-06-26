@@ -10,7 +10,7 @@
 ##                                                   ##
 #######################################################
 
-GLOBALPATH=$(pwd)
+GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
 config="$GLOBALPATH/../config.json"
 DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 

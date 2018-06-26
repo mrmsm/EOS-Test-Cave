@@ -10,7 +10,7 @@
 #
 ###############################################################################
 
-SCRIPTPATH=$(pwd)""
+SCRIPTPATH=$(/usr/bin/dirname $(realpath $0))""
 config="$SCRIPTPATH/../config.json"
 WALLETHOST="$( /usr/bin/jq -r '.walletAddr' "$config" )"
 NODEHOST="$( /usr/bin/jq -r '.nodeos' "$config" )"

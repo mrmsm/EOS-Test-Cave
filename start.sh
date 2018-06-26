@@ -125,5 +125,5 @@ DIFF=$(/bin/echo "$ENDTIME - $STARTTIME" | /usr/bin/bc)
 /bin/echo -e "\e[92m▒\e[m"
 /bin/echo -e "\e[92m▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\e[m"
 /bin/echo ""
-
-[ $TEST_FAILED -eq 0 ] && exit 0 || exit 1
+read -n 1 -s -r -p "Press any key to continue"
+/bin/echo ""
