@@ -9,5 +9,5 @@ before_install:
 - docker pull eosio/eos:latest
 - docker volume create --name=nodeos-data-volume
 - docker volume create --name=keosd-data-volume
-- docker-compose -f docker-compose-eosio1.0.yaml up -d
+- docker-compose -f docker-compose.yaml up -d
 - curl http://127.0.0.1:8888/v1/chain/get_info
