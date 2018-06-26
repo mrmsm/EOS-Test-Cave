@@ -1,6 +1,6 @@
 {
- "walletAddr": "127.0.0.1:8888",
- "nodeos": "127.0.0.1:18888",
+ "walletAddr": "127.0.0.1:8900",
+ "nodeos": "127.0.0.1:8888",
  "wallet_data_dir": "/tmp/eosio-wallet",
  "node_data_dir": "/tmp/node-data",
  "node_data_dir_2": "/tmp/node-data-2",

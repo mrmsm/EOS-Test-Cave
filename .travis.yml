@@ -12,7 +12,7 @@ before_install:
 - docker-compose -f docker-compose.yaml up -d
 - curl http://127.0.0.1:8888/v1/chain/get_info
 - cp config.json.ci config.json
-- sudo apt-get install -y jq bc realpath clang-4.0 lldb-4.0 libclang-4.0-dev cmake libbz2-dev libssl-dev libgmp3-dev autotools-dev libicu-dev python2.7-dev python3-dev autoconf libtool zlib1g-dev doxygen graphviz
+- sudo apt-get install -y jq bc realpath
 
 script:
 - pwd
