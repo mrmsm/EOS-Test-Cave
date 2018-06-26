@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GLOBALPATH=$(pwd)
+GLOBALPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 /bin/echo "Preparing and clearing..."
 
