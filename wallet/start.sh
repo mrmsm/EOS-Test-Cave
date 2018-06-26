@@ -4,7 +4,7 @@ GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
 config="$GLOBALPATH/../config.json"
 DIR="$( /usr/bin/jq -r '.wallet_data_dir' "$config" )"
 
-KEOSDBINDIR="$GLOBALPATH/../bin/bin/keosd"
+KEOSDBINDIR="docker-compose exec keosd /opt/eosio/bin/keosd"
 
 /bin/echo "Starting Keosd";
 
