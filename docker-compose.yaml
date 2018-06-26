@@ -12,6 +12,7 @@ services:
       - "8888"
     volumes:
       - nodeos-data-volume:/opt/eosio/bin/data-dir
+      - ./:/opt/app
 
   keosd:
     image: eosio/eos:v1.0.6
