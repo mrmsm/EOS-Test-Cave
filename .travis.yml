@@ -13,8 +13,7 @@ before_install:
 - curl http://127.0.0.1:8888/v1/chain/get_info
 - cp config.json.ci config.json
 - sudo apt-get install -y jq bc realpath
+- docker-compose exec nodeosd apt-get install -y jq bc
 
 script:
-- pwd
-- ls -lah
-- sudo ./start.sh
+- docker-compose exec nodeosd /bin/bash /opt/app/start.sh
