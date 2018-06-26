@@ -11,7 +11,7 @@
 ######################################################################
 
 if [[ ! $GLOBALPATH ]]; then
-	GLOBALPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../.."
+    GLOBALPATH="$(pwd)/../.."
 fi
 
 config="$GLOBALPATH/config.json"
