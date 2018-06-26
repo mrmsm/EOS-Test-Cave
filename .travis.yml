@@ -7,4 +7,5 @@ services:
 
 before_install:
 - docker pull eosio/eos:latest
+- docker-compose up
 - docker ps -a
