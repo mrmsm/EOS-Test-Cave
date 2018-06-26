@@ -16,4 +16,4 @@ WALLETHOST="$( /usr/bin/jq -r '.walletAddr' "$config" )"
 NODEHOST="$( /usr/bin/jq -r '.nodeos' "$config" )"
 
 
-$SCRIPTPATH/bin/cleos -u http://$NODEHOST --wallet-url http://$WALLETHOST "$@"
+docker-compose exec keosd /opt/eosio/bin/cleos -u http://nodeosd:8888 --wallet-url http://localhost:8900 "$@"
