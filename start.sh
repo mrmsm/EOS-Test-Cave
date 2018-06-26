@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GLOBALPATH=$(/usr/bin/dirname $(/usr/bin/realpath $0))
+GLOBALPATH=$(pwd)
 
 /bin/echo "Preparing and clearing..."
 

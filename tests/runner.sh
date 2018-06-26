@@ -11,7 +11,7 @@
 ######################################################################
 
 if [[ ! $GLOBALPATH ]]; then
-    GLOBALPATH="$(dirname $(realpath $0))/../.."
+    GLOBALPATH="$(pwd)/../.."
 fi
 
 config="$GLOBALPATH/config.json"
