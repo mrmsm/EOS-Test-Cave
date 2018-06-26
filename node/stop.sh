@@ -10,7 +10,7 @@
 ##                                                   ##
 #######################################################
 
-GLOBALPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+GLOBALPATH=$(pwd)
 config="$GLOBALPATH/../config.json"
 DIR="$( /usr/bin/jq -r '.node_data_dir' "$config" )"
 
