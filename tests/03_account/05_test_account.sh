@@ -1,4 +1,4 @@
-TEST_NAME="Create test account with non-eosio account and transfer liquid tokens to it"
+TEST_NAME="Create test account with non-eosio account and transfer liquid tokens"
 
 . ../runner.sh
 
