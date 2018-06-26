@@ -22,6 +22,7 @@ services:
       - nodeosd
     volumes:
       - keosd-data-volume:/opt/eosio/bin/data-dir
+      - ./:/opt/app
 
 volumes:
  nodeos-data-volume:
