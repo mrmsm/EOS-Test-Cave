@@ -41,6 +41,7 @@ $GLOBALPATH/wallet/start.sh
 
 # Restart chain
 $GLOBALPATH/node/start.sh --delete-all-blocks --genesis-json $GLOBALPATH/node/genesis.json
+$GLOBALPATH/producing-nodes/start.sh --delete-all-blocks --genesis-json $GLOBALPATH/producing-nodes/genesis.json
 
 print_test_result() {
     T_=$1
@@ -105,6 +106,7 @@ STARTTIME=$(/bin/date +%s.%N)
 startCategoryTest "tests/01_wallet"
 startCategoryTest "tests/02_contracts"
 startCategoryTest "tests/03_account"
+startCategoryTest "tests/04_system"
 
 #########################################################################################################################
 #########################################################################################################################

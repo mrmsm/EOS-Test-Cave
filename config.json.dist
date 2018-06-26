@@ -3,11 +3,13 @@
  "nodeos": "127.0.0.1:18888",
  "wallet_data_dir": "/tmp/eosio-wallet",
  "node_data_dir": "/tmp/node-data",
+ "node_data_dir_2": "/tmp/node-data-2",
  "node_bin": "/usr/local/bin/nodeos",
  "wallet_test_name": "testwallet",
  "abp_account_name": "genesisblock",
  "test_account_name": "testaccount1",
  "eosio_key": "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3",
  "eosio_pub_key": "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV",
+ "signing_key": "EOS8eQUWgCYC6k75LwAYj9DmH24xA9Me6JCfCnrMMAg2ce6hu5Qf7",
  "test": "1"
 }
