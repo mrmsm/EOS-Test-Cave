@@ -11,3 +11,9 @@ before_install:
 - docker volume create --name=keosd-data-volume
 - docker-compose -f docker-compose.yaml up -d
 - curl http://127.0.0.1:8888/v1/chain/get_info
+- cp config.json.ci config.json
+
+script:
+- pwd
+- ls -lah
+- /bin/bash start.sh
