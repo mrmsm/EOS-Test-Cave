@@ -5,7 +5,7 @@ TEST_NAME="Unapprove producer (vote)"
 NAME="$( jq -r '.test_account_name' "$config" )"
 
 #----------------------
-sleep 10;
+sleep 1;
 
 CMD2=$( $GLOBALPATH/bin/cleos.sh system listproducers | grep testaccountu -A0 | sed 's/[^0-9]*//g'>$tpm_stderr_2)
 VAL_OLD=$(cat $tpm_stderr_2)
