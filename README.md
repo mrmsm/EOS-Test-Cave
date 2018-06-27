@@ -1,6 +1,6 @@
 # EOS-Test-Cave [![Build Status](https://travis-ci.com/EOS-BP-Developers/EOS-Test-Cave.svg?branch=master)](https://travis-ci.com/EOS-BP-Developers/EOS-Test-Cave)
 
-Automated EOS Testing scripts.
+Automated EOS testing framework.
 
 ## Dependencies
 
@@ -39,3 +39,12 @@ In the root project directory, tests are executed with:
 ## CI
 
 We have hooked in Travis CI which will auto build and execute tests in a controlled environment. The CI runner will execute on master and all PRs. No PR can be merged without CI passing!
+
+## Contributors
+
+This is made with ♥ by:
+
+- [CryptoLions](http://cryptolions.io/)
+- [HKEOS](https://www.hkeos.com)
+- [Block Matrix](https://blockmatrix.network)
+- [EOSSW/eden](https://eossweden.se)
