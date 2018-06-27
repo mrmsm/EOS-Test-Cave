@@ -24,3 +24,4 @@ failed(){
 }
 
 tpm_stderr="$GLOBALPATH/log/tmp_std_err.log"
+tpm_stderr_2="$GLOBALPATH/log/tmp_std_err_2.log"
