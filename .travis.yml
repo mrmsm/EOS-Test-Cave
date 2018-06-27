@@ -1,0 +1,16 @@
+sudo: required
+
+language: cpp
+
+services:
+  - docker
+
+before_install:
+- docker pull eosio/eos:latest
+- docker volume create --name=nodeos-data-volume
+- docker volume create --name=keosd-data-volume
+- docker-compose -f docker-compose.yaml up -d
+- cp config.json.ci config.json
+
+script:
+- docker-compose exec keosd bash -c "apt-get update && apt-get install -y jq bc && cd /opt/app && ./start.sh"
