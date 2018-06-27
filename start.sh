@@ -107,7 +107,7 @@ startCategoryTest "tests/01_wallet"
 startCategoryTest "tests/02_contracts"
 startCategoryTest "tests/03_account"
 startCategoryTest "tests/04_system"
-
+startCategoryTest "tests/05_transfers"
 #########################################################################################################################
 #########################################################################################################################
 
