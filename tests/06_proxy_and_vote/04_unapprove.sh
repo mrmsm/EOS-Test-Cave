@@ -9,7 +9,7 @@ sleep 1;
 
 CMD2=$( $GLOBALPATH/bin/cleos.sh system listproducers | grep testaccountu -A0 | sed 's/[^0-9]*//g'>$tpm_stderr_2)
 VAL_OLD=$(cat $tpm_stderr_2)
-CMD=$( $GLOBALPATH/bin/cleos.sh system voteproducer unapprove $NAME testaccountu 2>$tpm_stderr)
+CMD=$( $GLOBALPATH/bin/cleos.sh system voteproducer unapprove $NAME testaccountu -f 2>$tpm_stderr)
 ERR=$(cat $tpm_stderr)
 if [[ $ERR != *"executed transaction"* ]]; then
     failed "$ERR"
