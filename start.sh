@@ -108,6 +108,7 @@ startCategoryTest "tests/02_contracts"
 startCategoryTest "tests/03_account"
 startCategoryTest "tests/04_system"
 startCategoryTest "tests/05_transfers"
+startCategoryTest "tests/06_proxy_and_vote"
 #########################################################################################################################
 #########################################################################################################################
 
