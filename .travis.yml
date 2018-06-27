@@ -11,8 +11,6 @@ before_install:
 - docker volume create --name=keosd-data-volume
 - docker-compose -f docker-compose.yaml up -d
 - cp config.json.ci config.json
-- docker-compose exec nodeosd apt-get update
-- docker-compose exec nodeosd apt-get install -y jq bc
 
 script:
-- docker-compose exec nodeosd bash -c "cd /opt/app && ./start.sh"
+- docker-compose exec keosd bash -c "apt-get update && apt-get install -y jq bc && cd /opt/app && ./start.sh"
