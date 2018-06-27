@@ -127,4 +127,4 @@ DIFF=$(/bin/echo "$ENDTIME - $STARTTIME" | /usr/bin/bc)
 /bin/echo -e "\e[92m▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\e[m"
 /bin/echo ""
 
-[ $TEST_FAILED -eq 0 ] && exit 0 || exit 1
+[ $TEST_FAILED -eq 0 ] && exit 0 || cat $GLOBALPATH/log/log_error.log && exit 1
