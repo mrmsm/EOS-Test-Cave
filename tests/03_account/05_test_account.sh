@@ -13,6 +13,7 @@ ERR=$(cat $tpm_stderr)
 if [[ $ERR != *"executed transaction"* ]]; then
     failed "$ERR"
     rm $tpm_stderr;
+    exit 1;
 fi
 CMD2=$( $GLOBALPATH/bin/cleos.sh transfer eosio $NAME "5000000.0000 EOS" "liquid tokens" 2>$tpm_stderr)
 ERR=$(cat $tpm_stderr)
