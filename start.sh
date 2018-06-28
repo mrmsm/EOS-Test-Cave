@@ -111,7 +111,10 @@ startCategoryTest "tests/06_proxy_and_vote"
 startCategoryTest "tests/07_name_bids"
 startCategoryTest "tests/08_permissions"
 startCategoryTest "tests/09_msig"
+
+# Wait for a full producer round
 sleep 126;
+
 startCategoryTest "tests/10_claimrewards"
 #########################################################################################################################
 #########################################################################################################################

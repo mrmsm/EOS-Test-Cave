@@ -9,7 +9,7 @@ NAME=${accounts[0]}
 proposer=${accounts[${#accounts[@]}-1]}
 executer=${accounts[1]}
 
-CMD=$( $GLOBALPATH/bin/cleos.sh multisig exec $proposer $NAME -p ${executer}@active 2> $tpm_stderr )
+CMD=$( $GLOBALPATH/bin/cleos.sh multisig exec $proposer $NAME -p ${executer}@active -f 2> $tpm_stderr )
 ERR=$(cat $tpm_stderr)
 if [[ $ERR != *"executed transaction"* ]]; then
   failed "$ERR"
