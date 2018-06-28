@@ -11,7 +11,7 @@ msig_json="$GLOBALPATH/log/tmp_msig.json"
 NAME=${accounts[0]}
 
 echo '{"threshold":2,"keys":[],"accounts":[' > $msig_json
-for ((x=1;x<=3;x++));do
+for ((x=1;x<=3;x++)); do
   if [ $x -eq 3 ]; then
     echo '{"permission":{"actor":"'${accounts[$x]}'","permission":"owner"},"weight":1}' >> $msig_json
   else

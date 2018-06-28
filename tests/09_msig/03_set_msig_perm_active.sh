@@ -12,7 +12,7 @@ msig_json="$GLOBALPATH/log/tmp_msig.json"
 NAME=${accounts[0]}
 
 echo '{"threshold":2,"keys":[],"accounts":[' > $msig_json
-for ((x=1;x<=3;x++));do
+for ((x=1;x<=3;x++)); do
   if [ $x -eq 3 ]; then
     echo '{"permission":{"actor":"'${accounts[$x]}'","permission":"active"},"weight":1}' >> $msig_json
   else
@@ -20,7 +20,7 @@ for ((x=1;x<=3;x++));do
   fi
 done
 echo '], "waits":[]}' >> $msig_json
-  
+
 CMD=$( $GLOBALPATH/bin/cleos.sh set account permission ${NAME} active "$(cat $msig_json)" owner -p ${NAME}@owner 2>${tpm_stderr})
 
 ERR=$(cat $tpm_stderr)

@@ -9,7 +9,7 @@ accounts=( testmultisig msigconfirm1 msigconfirm2 msigconfirm3 );
 NAME=${accounts[0]}
 proposer=${accounts[${#accounts[@]}-1]}
 
-for((x=1;x<${#accounts[@]};x++));do
+for((x=1;x<${#accounts[@]};x++)); do
   CMD=$( $GLOBALPATH/bin/cleos.sh multisig approve $proposer $NAME '{"actor":"'${accounts[$x]}'","permission":"active"}' -p ${accounts[$x]}@active 2>$tpm_stderr )
   ERR=$(cat $tpm_stderr)
   if [[ $ERR != *"executed transaction"* ]]; then

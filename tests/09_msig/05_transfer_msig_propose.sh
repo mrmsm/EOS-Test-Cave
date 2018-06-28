@@ -9,7 +9,7 @@ NAME=${accounts[0]}
 msig_json="$GLOBALPATH/log/tmp_msig.json"
 echo '[' > $msig_json
 #----------------------
-for((x=1;x<=3;x++));do
+for((x=1;x<=3;x++)); do
   CONFIRMER=${accounts[$x]}
   if [ $x -eq 3 ]; then
     echo '  {"actor":"'$CONFIRMER'","permission":"active"}]' >> $msig_json
