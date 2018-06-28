@@ -110,7 +110,7 @@ startCategoryTest "tests/05_transfers"
 startCategoryTest "tests/06_proxy_and_vote"
 startCategoryTest "tests/07_name_bids"
 startCategoryTest "tests/08_permissions"
-startCategoryTest "tests/09_msig"
+#startCategoryTest "tests/09_msig"
 
 # Wait for a full producer round
 sleep 126;
