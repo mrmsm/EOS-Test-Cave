@@ -7,7 +7,7 @@ accounts=( testmultisig msigconfirm1 msigconfirm2 msigconfirm3 );
 #----------------------
 PUB_KEY=$( cat $GLOBALPATH/log/wallet_name_testwallet_key.dat | cut -d' ' -f1)
 for NAME in "${accounts[@]}"; do
-  CMD=$( $GLOBALPATH/bin/cleos.sh system newaccount eosio $NAME $PUB_KEY --stake-net "1000.0000 EOS" --stake-cpu "1000.0000 EOS" --buy-ram "1.0000 EOS" --transfer -f 2>$tpm_stderr )
+  CMD=$( $GLOBALPATH/bin/cleos.sh system newaccount eosio $NAME $PUB_KEY --stake-net "1000.0000 EOS" --stake-cpu "1000.0000 EOS" --buy-ram "1.0000 EOS" --transfer 2>$tpm_stderr )
 
   ERR=$(cat $tpm_stderr)
   if [[ $ERR != *"executed transaction"* ]]; then
