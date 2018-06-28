@@ -13,4 +13,4 @@ before_install:
 - cp config.json.ci config.json
 
 script:
-- docker-compose exec keosd bash -c "apt-get update && apt-get install -y jq bc && cd /opt/app && ./start.sh"
+- docker-compose exec keosd bash -c "apt-get update && apt-get install -y jq bc && cd /opt/app && ./start.sh ci"
