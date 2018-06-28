@@ -40,7 +40,7 @@ fi
 $GLOBALPATH/wallet/start.sh
 
 # Restart chain
-$GLOBALPATH/node/start.sh --delete-all-blocks --genesis-json $GLOBALPATH/node/genesis.json
+$GLOBALPATH/node/start.sh --delete-all-blocks --genesis-json $GLOBALPATH/node/genesis.json --verbose-http-errors
 $GLOBALPATH/producing-nodes/start.sh --delete-all-blocks --genesis-json $GLOBALPATH/producing-nodes/genesis.json
 
 print_test_result() {
@@ -109,6 +109,7 @@ startCategoryTest "tests/03_account"
 startCategoryTest "tests/04_system"
 startCategoryTest "tests/05_transfers"
 startCategoryTest "tests/06_proxy_and_vote"
+startCategoryTest "tests/07_name_bids"
 #########################################################################################################################
 #########################################################################################################################
 
