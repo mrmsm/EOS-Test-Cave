@@ -6,8 +6,7 @@ NAME="$( jq -r '.abp_account_name' "$config" )"
 #----------------------
 
 accounts=( testaccounta testaccountb testaccountc testaccountd testaccounte testaccountf testaccountg testaccounth testaccounti testaccountj testaccountk testaccountl testaccountm testaccountn testaccounto testaccountp testaccountq testaccountr testaccounts testaccountt testaccountu testaccountv );
-for account in "${accounts[@]}"
-do
+for account in "${accounts[@]}"; do
   CMD2=$( $GLOBALPATH/bin/cleos.sh get currency balance eosio.token $account | sed 's/[^0-9]*//g'>$tpm_stderr_2)
   VAL_OLD=$(cat $tpm_stderr_2)
   CMD=$( $GLOBALPATH/bin/cleos.sh transfer $NAME $account "150000.0000 EOS" "free tokens" -p $NAME 2>$tpm_stderr)
