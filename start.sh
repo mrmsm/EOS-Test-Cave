@@ -102,7 +102,6 @@ STARTTIME=$(/bin/date +%s.%N)
 
 #########################################################################################################################
 #########################################################################################################################
-
 startCategoryTest "tests/01_wallet"
 startCategoryTest "tests/02_contracts"
 startCategoryTest "tests/03_account"
@@ -110,7 +109,10 @@ startCategoryTest "tests/04_system"
 startCategoryTest "tests/05_transfers"
 startCategoryTest "tests/06_proxy_and_vote"
 startCategoryTest "tests/07_name_bids"
+startCategoryTest "tests/08_permissions"
 startCategoryTest "tests/09_msig"
+sleep 126;
+startCategoryTest "tests/10_claimrewards"
 #########################################################################################################################
 #########################################################################################################################
 
