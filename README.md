@@ -16,6 +16,7 @@ sudo apt-get install -y jq bc
 
 ```console
 git clone https://github.com/EOS-BP-Developers/EOS-Test-Cave.git
+git checkout v0.1.0
 ```
 
 ## Config
@@ -48,3 +49,4 @@ This is made with ♥ by:
 - [HKEOS](https://www.hkeos.com)
 - [Block Matrix](https://blockmatrix.network)
 - [EOSSW/eden](https://eossweden.se)
+- [EOSeoul](http://eoseoul.io/)
