@@ -18,7 +18,7 @@ do
   fi
   CMD3=$( $GLOBALPATH/bin/cleos.sh get currency balance eosio.token $account | sed 's/[^0-9]*//g'>$tpm_stderr)
   VAL_NEW=$(cat $tpm_stderr)
-  if [[ $VAL_OLD -eq $VAL_NEW ]]; then
+  if [[ "$VAL_OLD" == "$VAL_NEW" ]]; then
     failed "Balance was not updated"
     rm $tpm_stderr;
     rm $tpm_stderr_2;
