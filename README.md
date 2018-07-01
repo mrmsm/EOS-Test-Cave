@@ -51,3 +51,4 @@ This is made with ♥ by:
 - [Block Matrix](https://blockmatrix.network)
 - [EOSSW/eden](https://eossweden.se)
 - [EOSeoul](http://eoseoul.io/)
+- [eosDAC](https://eosdac.io/)
