@@ -113,6 +113,7 @@ startCategoryTest "tests/08_permissions"
 
 if [ "$1" != "ci" ]; then
     startCategoryTest "tests/09_msig"
+    startCategoryTest "tests/11_get_requests"
     sleep 126;
     startCategoryTest "tests/10_claimrewards"
 fi
