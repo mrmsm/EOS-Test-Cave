@@ -6,8 +6,9 @@ TEST_NAME="Generate set contract update json data"
 
 NAME="eosio"
 msig_json="$GLOBALPATH/log/tmp_msig_data.json"
+msig_json_tmp="$GLOBALPATH/log/tmp_msig_data.tmp"
 
-CMD=$( $GLOBALPATH/bin/cleos.sh set contract $NAME $GLOBALPATH/contracts_update/eosio.system  -p ${NAME}@active -d -j -s 2> $tpm_stderr | tail -n +4 > $msig_json )
+CMD=$(echo -n $($GLOBALPATH/bin/cleos.sh set contract $NAME $GLOBALPATH/contracts_update/eosio.system  -p ${NAME}@active -d -j -s 2> $tpm_stderr) | awk -F"contract\.\.\.\ " '{print $2}' 2> $tpm_stderr  > $msig_json)
 
 ERR=$(cat $tpm_stderr)
 if [[ $ERR != "" ]]; then
@@ -17,3 +18,4 @@ if [[ $ERR != "" ]]; then
 fi
 
 echo "1:$TEST_NAME"
+#rm -f $msig_json_tmp
