@@ -17,7 +17,7 @@ sudo apt-get install -y jq bc
 ```console
 git clone https://github.com/EOS-BP-Developers/EOS-Test-Cave.git
 cd EOS-Test-Cave
-git checkout v0.2.0
+git checkout v0.3.0
 ```
 
 ## Config
