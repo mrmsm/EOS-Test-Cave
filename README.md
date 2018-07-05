@@ -52,3 +52,4 @@ This is made with ♥ by:
 - [EOSSW/eden](https://eossweden.se)
 - [EOSeoul](http://eoseoul.io/)
 - [eosDAC](https://eosdac.io/)
+- [shEOS](https://sheos.org/)
